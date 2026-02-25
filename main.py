@@ -45,7 +45,8 @@ def get_latest_title():
         return None, None
 
 def send_push(title, link):
-    if nlogger.warning("标题或链接为空，跳过推送")
+    if not title or not link:
+        logger.warning("标题或链接为空，跳过推送")
         return
 
     if not PUSH_TOKEN:
@@ -68,6 +69,10 @@ def send_push(title, link):
 
     try:
         response = requests.post(api, json=data, timeout=10)
+        logger.info(f"推送结果: {response.text}")
+    except Exception as e:
+        logger.error(f"推送失败: {e}")
+
 def main():
     logger.info("启动央行公告监控服务")
     global last_title
@@ -82,7 +87,7 @@ def main():
                     send_push(title, link)
                     last_title = title
                 else:
-                    logger.debug("公告标题未更新")
+                    logger.info("公告标题未更新")
             else:
                 logger.warning("未能获取到最新公告标题")
 
@@ -93,9 +98,4 @@ def main():
             time.sleep(10)
 
 if __name__ == "__main__":
-    main(
-        time.sleep(30)
-
-    except Exception as e:
-        print("循环中发生错误:", e)
-        time.sleep(10)
+    main()
