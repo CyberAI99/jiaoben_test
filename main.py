@@ -91,7 +91,7 @@ def main():
             else:
                 logger.warning("未能获取到最新公告标题")
 
-            time.sleep(30)
+            time.sleep(300)
 
         except Exception as e:
             logger.error(f"循环中发生错误: {e}")
